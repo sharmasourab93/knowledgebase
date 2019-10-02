@@ -1,0 +1,6 @@
+[console_scripts]
+initialize_kb_db = kb.scripts.initialize_db:main
+
+[paste.app_factory]
+main = kb:main
+

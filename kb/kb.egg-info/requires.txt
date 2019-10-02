@@ -1,0 +1,10 @@
+transaction
+pyramid
+waitress
+pyramid_debugtoolbar
+pyramid_tm
+sqlalchemy
+psycopg2
+alembic
+zope.sqlalchemy
+webtest
