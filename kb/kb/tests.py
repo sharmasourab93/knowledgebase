@@ -41,29 +41,32 @@ class ViewTest(unittest.TestCase):
     def test_create_word_view(self):
         from .views import Views
         
+        word = 'beyond'
         request = testing.DummyRequest()
+        
         view_obj = Views(request)
         
         # Passing None as an object by default
-        data = view_obj.create_word()
-        self.assertEqual(data['word'], 'None')
+        data = view_obj.create_word(word)
+        
+        self.assertEqual(data['word'], word)
     
     def test_get_one_word(self):
         from .views import Views
-        meaning = "Not in db"
         
+        word = 'beyond'
         request = testing.DummyRequest()
         view_obj = Views(request)
-        data = view_obj.get_one()
+        data = view_obj.get_one(word)
         
-        self.assertEqual(data['meaning'], meaning)
+        self.assertEqual(data['word'], word)
         
     def test_get_one_id(self):
         from .views import Views
         
         request = testing.DummyRequest()
         view_obj = Views(request)
-        data = view_obj.get_id()
+        data = view_obj.get_id(1)
         
         self.assertEqual(data['uid'], 1)
     
@@ -72,12 +75,20 @@ class ViewTest(unittest.TestCase):
         
         request = testing.DummyRequest()
         view_obj = Views(request)
-        print(request)
-        data = view_obj.update()
-        print(data)
-        self.assertEquals(data['word'], 'None')
-
-
+        first, second = 'beyond', 'builder'
+        data = view_obj.get_one(first)
+        
+        if data['meaning'] == "Doesn't exist":
+            
+            second = "Doesn't exist"
+            self.assertEquals(data['meaning'], second)
+            
+        else:
+            
+            data = view_obj.update(first, second)
+            self.assertEqual(data['meaning'], second)
+        
+        
 class ModelsTest(unittest.TestCase):
     
     def setUp(self):
@@ -95,7 +106,7 @@ class ModelsTest(unittest.TestCase):
         try:
             
             page = DBSession.query(DictionaryCombo)\
-                .filter_by(word="joy").one()
+                .filter_by(word="joy").first()
 
             self.assertEqual(page.word, "joy")
             self.assertEqual(page.meaning, "happy")
@@ -111,12 +122,3 @@ class ModelsTest(unittest.TestCase):
             
             self.assertEqual(page.word, "joy")
             self.assertEqual(page.meaning, "happy")
-        
-        finally:
-            page = DBSession.query(DictionaryCombo)\
-                .filter_by(word="joy").one()
-            
-            with transaction.manager:
-                DBSession.delete(page)
-                
-            transaction.manager.commit()

@@ -1,6 +1,9 @@
-The Given requirement was:
-  Tech stack: python3+pyramid
-   In brief: Implement HTTP/REST server for knowledge base management.
+The Given requirement:
+  
+  Tech stack: **_python3+pyramid_**
+   
+   **Implement HTTP/REST server for knowledge base management**.
+   
    Operations:
    - Create KB item
    - Get KB item by number
@@ -8,15 +11,21 @@ The Given requirement was:
    - Update KB item
    - Find KB items by title or text
    - List all KB items
-   No UI, use JSON format for API.
-   Database: PostgreSQL
-   Tests are mandatory.
-   Server should de delivered as a docker container.
-   Use public github repo.
    
-Knowledgebase is basically an implementation of an English Dictionary. 
-There is additional module being used called dictionary 
-in views to fetch meaning of a word from Cambridge univ site.   
+   No UI, use JSON format for API.
+   
+   Database: PostgreSQL
+   
+   Tests are mandatory.
+   
+   Server should de delivered as a docker container.
+   
+   Use public github repo.
+
+
+_`Knowledgebase is basically an implementation of an English Dictionary.
+There is an additional module called eng_dictionary.This module enables  
+one to fetch meaning of a word from Cambridge univ site using beautifulsoup parser.`_   
 
 The Following KB Management system 
 
@@ -30,13 +39,41 @@ The Following KB Management system
 	Unit tests: Present
 
    
- These are the following routes with their respective functionalities and pattern to test the application 
- Route 							Pattern 		 							Functionality 
- '/create' 						/create?word=<whatever word>			To Create a new word to lookup meaning
- '/one'							/one?word=<whatever word>				To Find meaning of a word based on the word/text
- '/item'						/item?item=<NUM>						To Find the word & meaning against the i {NUM}
- 'update/{first}/{second}'      /update/<first_word>/<second_word>      To update a word's meaning to second_word
- '/delete'						/delete?word=<word whatever> 			To Delete a word & it's entry from DB
- '/'							/										To return all the words & respective meanings
+ These are the following routes 
  
+  **Create Knowledge Base Item**
+  
+  - _`http://localhost:6543/create/{word}`_
+   
+   {word} takes the word for which the meaning has to be looked up for.
+   This view adds the word and the meaning of the word into the database. 
+   
+   **GET Knowledge Base Item**
+   - _`http://localhost:6543/get/{word}`_
+   
+   {word} takes the word to be search for in the database. 
+   This view queries the word and meaning of the word in the database. 
+      
+   **GET Knowledge Base Item By Number**
+   - _`http://localhost:6543/item/{id}`_
+   
+   {id} takes the unique id auto assigned to all the entries created in the database.
+   This view returns the UID, word and meaning from the database 
+   
+   **Update Knowledge Base Item**
+   - _`http://localhost:6543/update/{first}/{second}`_
+   
+   {first} is the word to be looked up for and 
+   {second} is the meaning to be updated for the word {first}. 
+   
+   **Delete Knowledge Base Item**
+   - _`http://localhost:6543/delete/{word}`_
+   
+   {word} takes the word in the database to be deleted.
+   Returns the list of all items in the database. 
+   
+   **List All Knowledge Base Items**
+   - _`http://localhost:6543/`_
+   
+   Fetches all the entries in the database and outputs it in the response. 
  
