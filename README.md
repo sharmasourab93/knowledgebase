@@ -42,6 +42,7 @@ The Following KB Management system
  These are the following routes 
  
   **Create Knowledge Base Item**
+  
   -_`http://localhost:6543/create/{word}`_
    
    {word} takes the word for which the meaning has to be looked up for.
