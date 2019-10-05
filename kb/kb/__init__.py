@@ -15,12 +15,12 @@ def main(global_config, **settings):
     config = Configurator(settings=settings,
                           root_factory=RootFactory)
     
-    config.add_route('create', '/create')
-    config.add_route('get', '/one')
-    config.add_route('get_id', '/item')
-    config.add_route('update', 'update/{first}/{second}')
-    config.add_route('delete', '/delete')
-    config.add_route('list-all', '/')
+    config.add_route('create', r'/create/{word}')
+    config.add_route('get_one', r'/get/{word}')
+    config.add_route('get_id', r'/item/{id:\d+}')
+    config.add_route('update', r'update/{first}/{second}')
+    config.add_route('delete', r'/delete/{word}')
+    config.add_route('list', r'/')
     
     config.scan('.views')
     

@@ -15,7 +15,7 @@ class Views(object):
         self.request = request
     
     @view_config(route_name='create', renderer='json')
-    def create_word(self):
+    def create_word(self, word=None):
         """
             To create an object,
             look up the meaning of the word on
@@ -24,8 +24,8 @@ class Views(object):
             the database.
             Eventually, returns word & meaning.
         """
-        
-        word = self.request.params.get('word', 'None')
+        if word is None:
+            word = self.request.matchdict['word']
         
         try:
             page = DBSession.query(Page).filter_by(word=word).one()
@@ -52,59 +52,60 @@ class Views(object):
         
                 return dict(word=word, meaning=meaning)
         
-    @view_config(route_name='get', renderer='json')
-    def get_one(self):
+    @view_config(route_name='get_one', renderer='json')
+    def get_one(self, word=None):
         """
            To return values from the database
            based on values equalling word.
         """
         
-        item = self.request.params.get('word', 'No word provided')
+        if word is None:
+            word = self.request.matchdict['word']
         
         try:
             
-            page = DBSession.query(Page).filter_by(word=item).one()
+            page = DBSession.query(Page).filter_by(word=word).one()
             
             return dict(word=page.word, meaning=page.meaning)
         
         except NoResultFound:
             
-            return dict(word=item, meaning='Not in db')
+            return dict(word=word, meaning='Not in db')
     
     @view_config(route_name='get_id', renderer='json')
-    def get_id(self):
+    def get_id(self, id=None):
         """
             To return values from the database
             based on values equalling id.
         """
-        # Adding item as 1 in the params
-        # In view of the unittest cases
-        item = self.request.params.get('item', 1)
+        
+        if id is None:
+            id = self.request.matchdict['id']
         
         try:
             
-            page = DBSession.query(Page).filter_by(uid=item).one()
+            page = DBSession.query(Page).filter_by(uid=id).one()
             
             return dict(uid=page.uid, word=page.word, meaning=page.meaning)
         
         except NoResultFound:
             
-            return dict(id=item, error="No value found")
+            return dict(id=id, error="No value found")
         
-    @view_config(route_name='update',  renderer='json',
-                 permission='POST')
-    def update(self):
+    @view_config(route_name='update',  renderer='json')
+    def update(self, first=None, second=None):
         """
             To return an updated meaning
             to a word existing in the dictionary.
         """
         
-        first = self.request.params.get('first', 'None')
-        second = self.request.params.get('second', 'None')
+        if first is None and second is None:
+            first = self.request.matchdict['first']
+            second = self.request.matchdict['second']
         
         try:
             
-            page = DBSession.query(Page).filter_by(word=first).first()
+            page = DBSession.query(Page).filter_by(word=first).one()
             page.meaning = second
         
             with manager:
@@ -116,9 +117,10 @@ class Views(object):
         
         except NoResultFound:
             
-            return dict(word=first, error="Doesn't exist")
+            return dict(word=first, meaning="Doesn't exist")
         
-    @view_config(route_name='list-all',  renderer='json')
+    @view_config(route_name='list',  renderer='json',
+                 request_method='GET')
     def list_all(self):
         """
             List all the words and their
@@ -140,7 +142,7 @@ class Views(object):
         """
         try:
             
-            to_delete = self.request.params.get('word', 'None')
+            to_delete = self.request.matchdict['word']
             page = DBSession.query(Page).filter_by(word=to_delete).one()
             
             with manager:
