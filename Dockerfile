@@ -1,16 +1,12 @@
-FROM archlinux\base 
+FROM python:3.6
 
-RUN pacman -Syu && \
-	pacman -Syu python-pip python-dev && \
-	pip install --upgrade pip setuptools 
-	
-WORKDIR knowledgebase/kb/
-
-RUN pip install -r requirements.txt 
-
-ENTRYPOINT [ "python" ]
-
-CMD [ " setup.py develop", 
-
-"pserve development.ini --reload", 
-	]
+RUN pip install setuptools
+COPY . /kb 
+WORKDIR kb/ 
+RUN apt-get update
+RUN apt-get install -y \
+    gettext \
+    postgresql
+RUN python kb/setup.py develop
+RUN python - m pip install -e kb/.
+CMD ["pserve", "development.ini", "--reload"]
