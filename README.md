@@ -43,7 +43,7 @@ The Following KB Management system
  
   **Create Knowledge Base Item**
   
-  -_`http://localhost:6543/create/{word}`_
+  - _`http://localhost:6543/create/{word}`_
    
    {word} takes the word for which the meaning has to be looked up for.
    This view adds the word and the meaning of the word into the database. 
@@ -63,7 +63,7 @@ The Following KB Management system
    **Update Knowledge Base Item**
    - _`http://localhost:6543/update/{first}/{second}`_
    
-   {first} is the word to by looked up for and 
+   {first} is the word to be looked up for and 
    {second} is the meaning to be updated for the word {first}. 
    
    **Delete Knowledge Base Item**
