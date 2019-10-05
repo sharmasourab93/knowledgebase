@@ -70,6 +70,7 @@ The Following KB Management system
    - _`http://localhost:6543/delete/{word}`_
    
    {word} takes the word in the database to be deleted.
+   Returns the list of all items in the database. 
    
    **List All Knowledge Base Items**
    - _`http://localhost:6543/`_
